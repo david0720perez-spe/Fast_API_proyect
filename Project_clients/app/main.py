@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-from app.enrutador import clientes, facturas
+from app.enrutador import cliente, factura
 
 # Crear la instancia de FastAPI
 app = FastAPI()
 
 # Incluir los routers
-app.include_router(clientes.router)
-app.include_router(facturas.router)
+app.include_router(cliente.router)
+app.include_router(factura.router)
 
 # Ruta raíz
 @app.get("/")

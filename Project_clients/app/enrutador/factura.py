@@ -1,6 +1,6 @@
 # app/enrutador/facturas.py
 from fastapi import APIRouter, HTTPException
-from ..modelos.facturas import Factura, FacturaCrear, FacturaEditar
+from ..modelos.factura import Factura, FacturaCrear, FacturaEditar
 
 router = APIRouter(prefix="/facturas", tags=["facturas"])
 
