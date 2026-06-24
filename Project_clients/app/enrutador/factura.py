@@ -1,4 +1,4 @@
-# app/enrutador/facturas.py
+#factura enrutador
 from fastapi import APIRouter, HTTPException
 from ..modelos.factura import Factura, FacturaCrear, FacturaEditar
 
