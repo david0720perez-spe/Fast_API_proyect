@@ -7,6 +7,7 @@ from app.modelos.transacciones import Transaccion
 
 class FacturaBase(SQLModel):
     fecha: datetime
+    cliente_id: int = Field(foreign_key="cliente.id")
 
 
 class CrearFactura(SQLModel):

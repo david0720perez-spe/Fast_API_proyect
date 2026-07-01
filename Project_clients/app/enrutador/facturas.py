@@ -51,7 +51,10 @@ async def crear_factura(
             detail="Cliente no encontrado"
         )
 
-    factura_val = Factura.model_validate(datos_factura.model_dump())
+    datos = datos_factura.model_dump()
+    datos["cliente_id"] = cliente_id
+
+    factura_val = Factura.model_validate(datos)
 
     mi_sesion.add(factura_val)
     mi_sesion.commit()
@@ -85,30 +88,6 @@ async def editar_factura(
 
     return factura
 
-@router.put("/{id}")
-async def editar_factura(
-    id: int,
-    datos_factura: EditarFactura,
-    mi_sesion: Sesion_dependencia
-):
-
-    factura = mi_sesion.get(Factura, id)
-
-    if not factura:
-        raise HTTPException(
-            status_code=404,
-            detail="Factura no encontrada"
-        )
-
-    datos = datos_factura.model_dump(exclude_unset=True)
-
-    factura.sqlmodel_update(datos)
-
-    mi_sesion.add(factura)
-    mi_sesion.commit()
-    mi_sesion.refresh(factura)
-
-    return factura
 
 @router.delete("/{id}")
 async def eliminar_factura(

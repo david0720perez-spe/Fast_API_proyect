@@ -35,7 +35,7 @@ async def obtener_transaccion(
         )
 
     return transaccion
-    
+
 @router.post("/{factura_id}")
 async def crear_transaccion(
     factura_id: int,
@@ -57,12 +57,15 @@ async def crear_transaccion(
     )
 
     transaccion.factura_id = factura_id
+    transaccion.precio_total = transaccion.cantidad * transaccion.vr_unitario
 
     mi_sesion.add(transaccion)
     mi_sesion.commit()
     mi_sesion.refresh(transaccion)
 
     return transaccion
+
+
 @router.put("/{id}")
 async def editar_transaccion(
     id: int,
@@ -82,12 +85,14 @@ async def editar_transaccion(
     datos = datos_transaccion.model_dump(exclude_unset=True)
 
     transaccion.sqlmodel_update(datos)
+    transaccion.precio_total = transaccion.cantidad * transaccion.vr_unitario
 
     mi_sesion.add(transaccion)
     mi_sesion.commit()
     mi_sesion.refresh(transaccion)
 
     return transaccion
+
 
 @router.delete("/{id}")
 async def eliminar_transaccion(
