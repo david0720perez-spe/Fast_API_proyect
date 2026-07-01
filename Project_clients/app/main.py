@@ -1,14 +1,12 @@
 from fastapi import FastAPI
-from app.enrutador import cliente, factura, transaccion
 
-# Crear la instancia de FastAPI
-app = FastAPI()
+from app.enrutador import clientes, facturas, transacciones
+from app.conexion_bd import crear_tablas
 
-# Incluir los routers
-app.include_router(cliente.router)
-app.include_router(factura.router)
-app.include_router(transaccion.router)
-# Ruta raíz
-@app.get("/")
-def home():
-    return {"mensaje": "Bienvenido a mi API de clientes y facturas"}
+
+app = FastAPI(lifespan= crear_tablas)
+
+
+app.include_router(clientes.router)
+app.include_router(facturas.router)
+app.include_router(transacciones.router)

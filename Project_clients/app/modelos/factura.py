@@ -1,17 +1,21 @@
-from pydantic import BaseModel
 from datetime import datetime
+from sqlmodel import SQLModel, Field
 
-class FacturaBase(BaseModel):
-    fecha: str
-    total: float
-    cliente: str
-    transaccion: list[str]
+from app.modelos.clientes import Cliente
+from app.modelos.transacciones import Transaccion
 
-class FacturaCrear(FacturaBase):
-    pass
 
-class FacturaEditar(FacturaBase):
-    pass
+class FacturaBase(SQLModel):
+    fecha: datetime
 
-class Factura(FacturaBase):
-    id: int
+
+class CrearFactura(SQLModel):
+    fecha: datetime
+
+
+class EditarFactura(SQLModel):
+    fecha: datetime
+
+
+class Factura(FacturaBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
