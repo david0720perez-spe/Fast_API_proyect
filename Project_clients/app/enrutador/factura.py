@@ -1,10 +1,9 @@
-#factura enrutador
 from fastapi import APIRouter, HTTPException
 from ..modelos.factura import Factura, FacturaCrear, FacturaEditar
 
 router = APIRouter(prefix="/facturas", tags=["facturas"])
 
-# Lista temporal para almacenar facturas (reemplazar con base de datos)
+# Lista temporal para almacenar facturas (en memoria)
 lista_facturas: list[Factura] = []
 
 # LISTAR TODAS LAS FACTURAS
@@ -15,8 +14,13 @@ async def listar_facturas():
 # CREAR UNA FACTURA
 @router.post("/", response_model=Factura)
 async def crear_factura(datos_factura: FacturaCrear):
-    factura_id = len(lista_facturas) + 1
-    factura = Factura(id=factura_id, **datos_factura.model_dump())
+    # Lógica robusta para generar ID: 
+    # El nuevo ID será el mayor existente + 1, o 1 si la lista está vacía
+    nuevo_id = 1
+    if lista_facturas:
+        nuevo_id = max(factura.id for factura in lista_facturas) + 1
+    
+    factura = Factura(id=nuevo_id, **datos_factura.model_dump())
     lista_facturas.append(factura)
     return factura
 
@@ -33,6 +37,7 @@ async def obtener_factura(id: int):
 async def editar_factura(id: int, datos_factura: FacturaEditar):
     for i, factura in enumerate(lista_facturas):
         if factura.id == id:
+            # Creamos la nueva instancia conservando el ID original
             factura_actualizada = Factura(id=id, **datos_factura.model_dump())
             lista_facturas[i] = factura_actualizada
             return factura_actualizada
